@@ -135,10 +135,10 @@ const Row1 = (props: Props) => {
             height={400}
             data={revenueProfit}
             margin={{
-              top: 20,
+              top: 15,
               right: 0,
               left: -10,
-              bottom: 55,
+              bottom: 45,
             }}
           >
             <CartesianGrid vertical={false} stroke={palette.grey[800]} />
