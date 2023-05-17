@@ -3,6 +3,10 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import Row1 from "./Row1";
 import Row2 from "./Row2";
 import Row3 from "./Row3";
+import { useParams } from "react-router-dom";
+import { useGetAreaCodeQuery } from "../../data/nomisApi";
+
+type PostCode = { postcode: string };
 
 const gridTemplateLargeScreens = `
 "a b c"
@@ -49,6 +53,20 @@ const gridTemplateSmallScreen = `
 `;
 
 const Dashboard = () => {
+  const { postcode }: PostCode = useParams() as PostCode;
+  let inner = postcode?.substr(postcode?.length - 3, 3);
+  let outer = postcode?.substr(0, postcode?.length - 3);
+  const formattedPC = outer + inner;
+  const { data, isSuccess, isLoading, isError, error } = useGetAreaCodeQuery({
+    postcode: formattedPC,
+  });
+  if (isSuccess) {
+    console.log("Area Code Result: ", data);
+  } else if (isLoading) {
+    console.log("IS LOADING");
+  } else if (isError) {
+    console.log("ERROR: ", error);
+  }
   const isAboveMediumScreens = useMediaQuery("(min-width:1200px)");
   return (
     <Box
@@ -70,11 +88,9 @@ const Dashboard = () => {
             }
       }
     >
-      <Row1/>
-      <Row2/>
-      <Row3/>
-      
-      
+      <Row1 />
+      <Row2 />
+      <Row3 />
     </Box>
   );
 };

@@ -1,12 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Box, Typography, useTheme } from "@mui/material";
+import Input from "@mui/material/Input";
+import TextField from "@mui/material/TextField";
 import FlexBetween from "../../components/FlexBetween";
 import PixIcon from "@mui/icons-material/Pix";
+import SearchIcon from "@mui/icons-material/Search";
+import IconButton from "@mui/material/IconButton";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const [postcode, setPostcode] = useState("");
+  const navigate = useNavigate();
+  const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    var url = postcode.replace(" ", "").replace("-", "");
+    navigate(`/postcode/${url}`);
+  };
   const { palette } = useTheme();
   const [selected, setSelected] = useState("dashboard");
   return (
@@ -18,6 +30,25 @@ const Navbar = (props: Props) => {
           {" "}
           PropIntel{" "}
         </Typography>
+      </FlexBetween>
+
+      {/** MIDDLE */}
+      <FlexBetween>
+        <form onSubmit={submitForm}>
+          <Input
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
+            type="text"
+            placeholder="Postcode..."
+            className="input"
+            startAdornment={
+              <IconButton type="submit" aria-label="send">
+                <SearchIcon />
+              </IconButton>
+            }
+            sx={{ color: palette.grey[100], bgcolor: palette.grey[600] }}
+          />
+        </form>
       </FlexBetween>
 
       {/* RIGHT SIDE */}
@@ -39,7 +70,10 @@ const Navbar = (props: Props) => {
             to="/returnoninvestment"
             onClick={() => setSelected("returnoninvestment")}
             style={{
-              color: selected === "returnoninvestment" ? "inherit" : palette.grey[700],
+              color:
+                selected === "returnoninvestment"
+                  ? "inherit"
+                  : palette.grey[700],
               textDecoration: "inherit",
             }}
           >
